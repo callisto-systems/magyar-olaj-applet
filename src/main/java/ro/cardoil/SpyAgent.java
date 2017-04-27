@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.lang.instrument.ClassFileTransformer;
 import java.lang.instrument.IllegalClassFormatException;
 import java.lang.instrument.Instrumentation;
+import java.net.JarURLConnection;
+import java.net.URL;
 import java.security.ProtectionDomain;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -20,12 +22,13 @@ import java.util.jar.JarFile;
  */
 public class SpyAgent implements ClassFileTransformer {
 
-	private String jarFile = "c:\\prj\\applet3\\applet3\\dist\\applet3.jar";
+	private String jarFile = getThisJarPath();
 
 	public static void premain(String agentArguments, Instrumentation instrumentation) {
 		try {
 			System.out.println("*******************************************");
 			System.out.println("Java agent loaded");
+			System.out.println("Jar location: " + getThisJarPath());
 			System.out.println("*******************************************");
 			instrumentation.addTransformer(new SpyAgent());
 		} catch (Exception e) {
@@ -36,10 +39,10 @@ public class SpyAgent implements ClassFileTransformer {
 	@Override
 	public byte[] transform(ClassLoader loader, String className, Class redefiningClass, ProtectionDomain domain, byte[] bytes) throws IllegalClassFormatException {
 		try {
-			if(!className.startsWith("hu/polygon/jform/client") && !className.startsWith("a/a/a")){
+			if (!className.startsWith("hu/polygon/jform/client") && !className.startsWith("a/a/a")) {
 				return null;
 			}
-			
+
 			byte classByte[];
 			JarFile jar = new JarFile(jarFile);
 			System.out.println("Reload class: " + className);
@@ -56,5 +59,18 @@ public class SpyAgent implements ClassFileTransformer {
 		} catch (Exception e) {
 			throw new RuntimeException("class transform exception", e);
 		}
+	}
+
+	private static String getThisJarPath() {
+		try {
+			URL url = SpyAgent.class.getClassLoader().getResource("ro/cardoil/SpyAgent.class");
+			JarURLConnection connection = (JarURLConnection) url.openConnection();
+			JarFile file = connection.getJarFile();
+			String jarPath = file.getName();
+			return jarPath;
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}	
+			
 	}
 }
