@@ -17,3 +17,22 @@ Also if fiddler root certificate is not in jre's store, add:
 
 to create the key store after exporting the .cer file to desktop from Fiddler:
 keytool.exe -import -file c:\Users\mihai\Desktop\FiddlerRoot.cer -keystore C:\Users\mihai\FiddlerKeystore -alias Fiddler
+
+--------------------------------------------------------------------------------------------------------------
+Example:
+
+-Djava.compiler=NONE -Xnoagent -Xdebug -Xrunjdwp:transport=dt_shmem,address=8000,server=y,suspend=y -javaagent:c:\prj\magyar-olaj-applet\target\magyar-olaj-applet-0.0.1-SNAPSHOT.jar -DproxySet=true -Dhttp.proxyHost=127.0.0.1 -Dhttps.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888 -Dhttps.proxyPort=8888 -Djavax.net.ssl.trustStore=C:\Users\mihai\FiddlerKeystore -Djavax.net.ssl.trustStorePassword=changeit
+
+
+tmp:
+
+-Djava.compiler=NONE -Xnoagent -Xdebug -Xrunjdwp:transport=dt_socket,address=2502,server=y,suspend=n -DproxySet=true -Dhttp.proxyHost=127.0.0.1 -Dhttps.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888 -Dhttps.proxyPort=8888 -Djavax.net.ssl.trustStore=C:\Users\mihai\FiddlerKeystore -Djavax.net.ssl.trustStorePassword=changeit
+
+
+-DproxySet=true -Dhttp.proxyHost=127.0.0.1 -Dhttps.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888 -Dhttps.proxyPort=8888 -Djavax.net.ssl.trustStore=C:\Users\mihai\FiddlerKeystore -Djavax.net.ssl.trustStorePassword=changeit
+
+-Djava.compiler=NONE -Xnoagent -Xdebug -Xrunjdwp:transport=dt_shmem,address=8203,server=y,suspend=n
+
+-Djava.compiler=NONE -Xnoagent -Xdebug -Xrunjdwp:transport=dt_socket,address=2502,server=y,suspend=n
+
+-Djavaplugin.trace=true -Xdebug -Xrunjdwp:transport=dt_shmem,address=debug,server=y,suspend=y -DproxySet=true -Dhttp.proxyHost=127.0.0.1 -Dhttps.proxyHost=127.0.0.1 -Dhttp.proxyPort=8888 -Dhttps.proxyPort=8888 -Djavax.net.ssl.trustStore=C:\Users\mihai\FiddlerKeystore -Djavax.net.ssl.trustStorePassword=changeit -javaagent:c:\prj\spy-java-agent-mol.git\target\spy-java-agent-mol.jar=c:\prj\magyar-olaj-applet\target\magyar-olaj-applet.jar
